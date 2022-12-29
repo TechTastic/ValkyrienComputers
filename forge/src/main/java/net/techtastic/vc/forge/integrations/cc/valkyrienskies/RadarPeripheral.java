@@ -10,6 +10,7 @@ import net.techtastic.vc.ValkyrienComputersConfig;
 import net.techtastic.vc.ValkyrienComputersBlocksCC;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.valkyrienskies.core.api.Ship;
@@ -90,6 +91,7 @@ public class RadarPeripheral implements IPeripheral {
 			for (Vector3d vec : ships) {
 				Ship ship = VSGameUtilsKt.getShipManagingPos(level, vec);
 				Vector3dc pos = ship.getShipTransform().getShipPositionInWorldCoordinates();
+				Quaterniondc rot = ship.getShipTransform().getShipCoordinatesToWorldCoordinatesRotation();
 
 				HashMap<String, Object> result = new HashMap<>();
 				result.put("name", VSGameUtilsKt.getShipObjectManagingPos(level, vec).getShipData().getName());
@@ -99,6 +101,13 @@ public class RadarPeripheral implements IPeripheral {
 				resultPos[1] = pos.y();
 				resultPos[2] = pos.z();
 				result.put("pos", resultPos);
+
+				Object[] resultRot = new Object[4];
+				resultRot[0] = rot.x();
+				resultRot[1] = rot.y();
+				resultRot[2] = rot.z();
+				resultRot[3] = rot.w();
+				result.put("rot", resultRot);
 
 				ShipData data = VSGameUtilsKt.getShipManagingPos(((ServerLevel) level), vec.x, vec.y, vec.z);
 
