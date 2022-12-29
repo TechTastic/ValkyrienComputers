@@ -30,6 +30,9 @@ object ValkyrienComputersConfig {
 
             @JsonSchema(description = "Maximum Range of Radars")
             val maxRadarRadius = 256
+
+            @JsonSchema(description = "Whether or not ship radars give ship rotation")
+            val radarGivesDistance = false;
         }
 
         val OpenComputers = OPENCOMPUTERS()
