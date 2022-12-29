@@ -46,27 +46,21 @@ public class RadarPeripheral implements IPeripheral {
 	}
 
 	public Object[] scanForShips(Level level, BlockPos position, double radius) {
+		RADARSETTINGS settings = ValkyrienComputersConfig.SERVER.getComputerCraft().getRadarSettings();
+
 		if (level == null || position == null) {
-			Object[] nullReturn = new Object[1];
-			nullReturn[0] = "booting";
-			return nullReturn;
+			return new Object[] {"booting"};
 		}
 
 		if (!level.isClientSide()) {
 			// THROW EARLY RESULTS
-			Object[] earlyResult = new Object[1];
-
 			if (radius < 1.0) {
-				earlyResult[0] = "radius too small";
-				return earlyResult;
-			} else if (radius > ValkyrienComputersConfig.SERVER.getComputerCraft().getMaxRadarRadius()) {
-				earlyResult[0] = "radius too big";
-				return earlyResult;
+				return new Object[] {"radius too small"};
+			} else if (radius > settings.getMaxRadarRadius()) {
+				return new Object[] {"radius too big"};
 			}
-
 			if (!level.getBlockState(position).getBlock().is(ValkyrienComputersBlocksCC.RADAR.get())) {
-				earlyResult[0] = "no radar";
-				return earlyResult;
+				return new Object[] {"no radar"};
 			}
 
 			// IF RADAR IS ON A SHIP, USE THE WORLD SPACE COORDINATES

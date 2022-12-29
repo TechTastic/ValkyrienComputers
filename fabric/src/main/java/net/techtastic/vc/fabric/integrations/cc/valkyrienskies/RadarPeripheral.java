@@ -46,27 +46,21 @@ public class RadarPeripheral implements IPeripheral {
 	}
 
 	public Object[] scanForShips(Level level, BlockPos position, double radius) {
+		RADARSETTINGS settings = ValkyrienComputersConfig.SERVER.getComputerCraft().getRadarSettings();
+
 		if (level == null || position == null) {
-			Object[] nullReturn = new Object[1];
-			nullReturn[0] = "booting";
-			return nullReturn;
+			return new Object[] {"booting"};
 		}
 
 		if (!level.isClientSide()) {
 			// THROW EARLY RESULTS
-			Object[] earlyResult = new Object[1];
-
 			if (radius < 1.0) {
-				earlyResult[0] = "radius too small";
-				return earlyResult;
-			} else if (radius > ValkyrienComputersConfig.SERVER.getComputerCraft().getMaxRadarRadius()) {
-				earlyResult[0] = "radius too big";
-				return earlyResult;
+				return new Object[] {"radius too small"};
+			} else if (radius > settings.getMaxRadarRadius()) {
+				return new Object[] {"radius too big"};
 			}
-
 			if (!level.getBlockState(position).getBlock().is(ValkyrienComputersBlocksCC.RADAR.get())) {
-				earlyResult[0] = "no radar";
-				return earlyResult;
+				return new Object[] {"no radar"};
 			}
 
 			// IF RADAR IS ON A SHIP, USE THE WORLD SPACE COORDINATES
@@ -82,40 +76,58 @@ public class RadarPeripheral implements IPeripheral {
 
 			// TESTING FOR NO SHIPS
 			if (results.length == 0) {
-				results = new Object[1];
-				results[0] = "no ships";
-				return results;
+				return new Object[] {"no ships"};;
 			}
 
 			// Give results the ID, X, Y, and z of each Ship
 			for (Vector3d vec : ships) {
 				Ship ship = VSGameUtilsKt.getShipManagingPos(level, vec);
+				ShipData data = VSGameUtilsKt.getShipManagingPos(((ServerLevel) level), vec.x, vec.y, vec.z);
 				Vector3dc pos = ship.getShipTransform().getShipPositionInWorldCoordinates();
 
 				HashMap<String, Object> result = new HashMap<>();
-				result.put("name", VSGameUtilsKt.getShipObjectManagingPos(level, vec).getShipData().getName());
+				// Give Name
+				if (settings.getRadarGetsName()) result.put("name", data.getName());
 
-				Object[] resultPos = new Object[3];
-				resultPos[0] = pos.x();
-				resultPos[1] = pos.y();
-				resultPos[2] = pos.z();
-				result.put("pos", resultPos);
+				// Give Position
+				if (settings.getRadarGetsPosition()) result.put("position", new Object[] {pos.x(), pos.y(), pos.z()});
 
-				if (ValkyrienComputersConfig.SERVER.getComputerCraft().getRadarGivesDistance()) {
+				// Give Mass
+				if (settings.getRadarGetsMass()) result.put("mass", data.getInertiaData().getShipMass());
+
+				// Give Rotation
+				if (settings.getRadarGetsRotation()) {
 					Quaterniondc rot = ship.getShipTransform().getShipCoordinatesToWorldCoordinatesRotation();
-
-					Object[] resultRot = new Object[4];
-					resultRot[0] = rot.x();
-					resultRot[1] = rot.y();
-					resultRot[2] = rot.z();
-					resultRot[3] = rot.w();
-					result.put("rot", resultRot);
+					result.put("rotation", new Object[]{rot.x(), rot.y(), rot.z(), rot.w()});
 				}
 
-				ShipData data = VSGameUtilsKt.getShipManagingPos(((ServerLevel) level), vec.x, vec.y, vec.z);
+				// Give Velocity
+				if (settings.getRadarGetsVelocity()) {
+					Vector3dc vel = data.getVelocity();
+					result.put("velocity", new Object[]{vel.x(), vel.y(), vel.z()});
+				}
 
-				result.put("mass", data.getInertiaData().getShipMass());
+				// Give Distance
+				if (settings.getRadarGetsDistance()) result.put("distance", VSGameUtilsKt.squaredDistanceBetweenInclShips(
+						level,
+						vec.x,
+						vec.y,
+						vec.z,
+						pos.x(),
+						pos.y(),
+						pos.z()
+				));
 
+				// Give Size
+				if (settings.getRadarGetsSize()) {
+					AABBic aabb = ship.getShipVoxelAABB();
+					result.put("size", new Object[]{
+							Math.abs(aabb.maxX() - aabb.minX()),
+							Math.abs(aabb.maxY() - aabb.minY()),
+							Math.abs(aabb.maxZ() - aabb.minZ())
+					});
+				}
+				
 				results[ships.indexOf(vec)] = result;
 			}
 
