@@ -1,7 +1,7 @@
 package net.techtastic.vc
 
-import me.shedaniel.architectury.event.events.TickEvent
-import me.shedaniel.architectury.platform.Platform
+import dev.architectury.event.events.TickEvent
+import dev.architectury.platform.Platform
 import net.minecraft.world.item.CreativeModeTab
 import org.valkyrienskies.core.config.VSConfigClass
 
