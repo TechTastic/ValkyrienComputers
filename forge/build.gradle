@@ -58,10 +58,10 @@ dependencies {
     shadowCommon("org.valkyrienskies:valkyrien-dependency-downloader:4.2")
 
     // CC Tweaked
-    modCompileOnly("curse.maven:cctweaked-282001:4061944")
+    modCompileOnly("curse.maven:cctweaked-282001:4061947")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4134995")
+    modCompileOnly("curse.maven:eureka-654384:4191654")
 }
 
 processResources {
