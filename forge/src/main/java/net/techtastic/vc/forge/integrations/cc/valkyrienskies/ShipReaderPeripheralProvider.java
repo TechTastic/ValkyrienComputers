@@ -7,7 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.techtastic.vc.ValkyrienComputersConfig;
-import net.techtastic.vc.ValkyrienComputersBlocksCC;
+import net.techtastic.vc.cc.ValkyrienComputersBlocksCC;
 import org.jetbrains.annotations.NotNull;
 
 public class ShipReaderPeripheralProvider implements IPeripheralProvider {

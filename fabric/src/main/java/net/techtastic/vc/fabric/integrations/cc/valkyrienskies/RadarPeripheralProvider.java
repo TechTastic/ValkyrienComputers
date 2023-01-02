@@ -5,7 +5,7 @@ import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.techtastic.vc.ValkyrienComputersBlocksCC;
+import net.techtastic.vc.cc.ValkyrienComputersBlocksCC;
 import org.jetbrains.annotations.NotNull;
 
 public class RadarPeripheralProvider implements IPeripheralProvider {

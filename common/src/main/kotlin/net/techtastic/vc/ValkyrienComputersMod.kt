@@ -2,7 +2,8 @@ package net.techtastic.vc
 
 import dev.architectury.event.events.TickEvent
 import dev.architectury.platform.Platform
-import net.minecraft.world.item.CreativeModeTab
+import net.techtastic.vc.cc.ValkyrienComputersBlocksCC
+import net.techtastic.vc.tis.ValkyrienComputersItemsTIS
 import org.valkyrienskies.core.config.VSConfigClass
 
 object ValkyrienComputersMod {
@@ -17,9 +18,14 @@ object ValkyrienComputersMod {
 
         ValkyrienComputersTab.registerTab()
 
-        val config = ValkyrienComputersConfig.SERVER.ComputerCraft
-        if (Platform.isModLoaded("computercraft") && !config.disableComputerCraft) {
+        val CC_config = ValkyrienComputersConfig.SERVER.ComputerCraft
+        if (Platform.isModLoaded("computercraft") && !CC_config.disableComputerCraft) {
             ValkyrienComputersBlocksCC.registerCCBlocks()
+        }
+
+        val TIS_config = ValkyrienComputersConfig.SERVER.TIS3D
+        if (Platform.isModLoaded("tis3d") && !TIS_config.disableTIS3D) {
+            ValkyrienComputersItemsTIS.registerItems()
         }
 
         TickEvent.SERVER_POST.register {

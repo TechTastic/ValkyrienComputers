@@ -56,6 +56,9 @@ dependencies {
     // CC Restitched
     modCompileOnly("curse.maven:cc-restitched-462672:3816592")
 
+    // TIS-3D
+    modImplementation("curse.maven:tis-3d-238603:3384198")
+
     // Eureka
     modCompileOnly("curse.maven:eureka-654384:4162363")
 }
