@@ -1,10 +1,9 @@
 package net.techtastic.vc
 
-import dev.architectury.event.events.TickEvent
 import dev.architectury.platform.Platform
 import net.techtastic.vc.cc.ValkyrienComputersBlocksCC
 import net.techtastic.vc.tis.ValkyrienComputersItemsTIS
-import org.valkyrienskies.core.config.VSConfigClass
+import org.valkyrienskies.core.impl.config.VSConfigClass
 
 object ValkyrienComputersMod {
     const val MOD_ID = "vc"
@@ -26,12 +25,6 @@ object ValkyrienComputersMod {
         val TIS_config = ValkyrienComputersConfig.SERVER.TIS3D
         if (Platform.isModLoaded("tis3d") && !TIS_config.disableTIS3D) {
             ValkyrienComputersItemsTIS.registerItems()
-        }
-
-        TickEvent.SERVER_POST.register {
-            val list = switchTickList()
-            list.forEach { it() }
-            list.clear()
         }
     }
 
