@@ -4,12 +4,8 @@ import dev.architectury.platform.Platform
 import net.minecraft.core.Registry
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.material.Material
 import net.techtastic.vc.integrations.cc.ComputerCraftBlocks
 import net.techtastic.vc.registry.DeferredRegister
-import net.techtastic.vc.registry.RegistrySupplier
 
 @Suppress("unused")
 object ValkyrienComputersBlocks {

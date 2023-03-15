@@ -28,9 +28,6 @@ object ValkyrienComputersConfig {
             @JsonSchema(description = "Disable Ship Readers")
             val disableShipReaders = false
 
-            @JsonSchema(description = "Maximum Range of Radars")
-            val maxRadarRadius = 256
-
             val RadarSettings = RADARSETTINGS()
 
             class RADARSETTINGS {

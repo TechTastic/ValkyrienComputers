@@ -1,7 +1,6 @@
 package net.techtastic.vc.blockentity
 
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ClipContext
@@ -20,12 +19,8 @@ import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.LoadedServerShip
 import org.valkyrienskies.core.api.ships.ServerShip
-import org.valkyrienskies.core.api.ships.saveAttachment
 import org.valkyrienskies.core.apigame.constraints.*
 import org.valkyrienskies.core.impl.hooks.VSEvents
-import org.valkyrienskies.core.impl.util.x
-import org.valkyrienskies.core.impl.util.y
-import org.valkyrienskies.core.impl.util.z
 import org.valkyrienskies.mod.common.*
 import org.valkyrienskies.mod.common.util.toJOML
 import org.valkyrienskies.mod.common.util.toJOMLD
