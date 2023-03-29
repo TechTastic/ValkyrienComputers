@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
+import net.techtastic.vc.ValkyrienComputersConfig;
 import net.techtastic.vc.integrations.cc.eureka.ShipHelmPeripheral;
 import org.jetbrains.annotations.NotNull;
 import org.valkyrienskies.eureka.block.ShipHelmBlock;
@@ -19,6 +20,10 @@ public class EurekaPeripheralProviders {
     public static class EurekaPeripheralProvider implements IPeripheralProvider {
         @Override
         public LazyOptional<IPeripheral> getPeripheral(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Direction direction) {
+            if (ValkyrienComputersConfig.SERVER.getComputerCraft().getDisableComputerCraft() ||
+                    ValkyrienComputersConfig.SERVER.getComputerCraft().getDisableEurekaIntegration())
+                return LazyOptional.empty();
+
             if (level.getBlockState(blockPos).getBlock() instanceof ShipHelmBlock) {
                 return LazyOptional.of( () -> new ShipHelmPeripheral(level, blockPos));
             }

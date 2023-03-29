@@ -43,6 +43,27 @@ object ValkyrienComputersConfig {
                 val radarGetsDistance = false
                 val radarGetsSize = false
             }
+
+            @JsonSchema(description = "Disable Gyroscopic Sensors")
+            val disableGyros = false
+
+            @JsonSchema(description = "Disable Accelerometers")
+            val disableAccels = false
+
+            @JsonSchema(description = "Disable Ultrasonic Sensors")
+            val disableSonic = false
+
+            @JsonSchema(description = "Default Alarm Distance for CC Events")
+            val defaultAlarmDistance = 3
+
+            @JsonSchema(description = "Max Alarm Distance for CC Events")
+            val maxAlarmDistance = 3
+
+            @JsonSchema(description = "Is alarm distance changeable>")
+            val alarmDistanceChangable = true
+
+            @JsonSchema(description = "Max Clip Distance for Ultrasonic getClip() method")
+            val maxClipDistance = 12
         }
     }
 }
