@@ -34,6 +34,9 @@ dependencies {
 
     // Eureka
     modCompileOnly("curse.maven:eureka-654384:4162363")
+
+    // TIS
+    modCompileOnly("curse.maven:tis-238603:3738437")
 }
 
 publishing {
