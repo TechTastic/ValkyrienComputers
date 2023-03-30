@@ -1,5 +1,7 @@
 package net.techtastic.vc.forge;
 
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.LoadingModList;
 import net.techtastic.vc.ValkyrienComputersMod;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +15,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.techtastic.vc.forge.integrations.cc.eureka.EurekaPeripheralProviders;
 import net.techtastic.vc.forge.integrations.cc.valkyrienskies.ValkyrienComputersPeripheralProviders;
+import net.techtastic.vc.forge.integrations.tis.eureka.EurekaSerialInterfaceProviders;
+import net.techtastic.vc.forge.integrations.tis.valkyrienskies.ValkyrienComputersModuleProviders;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import net.techtastic.vc.ValkyrienComputersConfig;
 //import net.techtastic.vc.block.WoodType;
@@ -40,13 +44,22 @@ public class ValkyrienComputersModForge {
 
         ValkyrienComputersMod.init();
 
-        LoadingModList mods = LoadingModList.get();
+        ModList mods = ModList.get();
         ValkyrienComputersConfig.Server.COMPUTERCRAFT ccConfig = ValkyrienComputersConfig.SERVER.getComputerCraft();
-        if (mods.getModFileById("computercraft") != null && !ccConfig.getDisableComputerCraft()) {
+        if (mods.isLoaded("computercraft") && !ccConfig.getDisableComputerCraft()) {
             ValkyrienComputersPeripheralProviders.registerPeripheralProviders();
 
-            if (mods.getModFileById("vs_eureka") != null && !ccConfig.getDisableEurekaIntegration()) {
+            if (mods.isLoaded("vs_eureka") && !ccConfig.getDisableEurekaIntegration()) {
                 EurekaPeripheralProviders.registerPeripheralProviders();
+            }
+        }
+
+        ValkyrienComputersConfig.Server.TIS tisConfig = ValkyrienComputersConfig.SERVER.getTIS3D();
+        if (ModList.get().isLoaded("tis3d") && !tisConfig.getDisableTIS3D()) {
+            ValkyrienComputersModuleProviders.register();
+
+            if (ModList.get().isLoaded("vs_eureka") && !tisConfig.getDisableEurekaIntegration()) {
+                EurekaSerialInterfaceProviders.register();
             }
         }
     }
@@ -56,24 +69,5 @@ public class ValkyrienComputersModForge {
         happendClientSetup = true;
 
         ValkyrienComputersMod.initClient();
-
-//        WheelModels.INSTANCE.setModelGetter(woodType -> ForgeModelBakery.instance().getBakedTopLevelModels()
-//                .getOrDefault(
-//                        new ResourceLocation(ValkyrienComputersMod.MOD_ID, "block/" + woodType.getResourceName() + "_ship_helm_wheel"),
-//                        Minecraft.getInstance().getModelManager().getMissingModel()
-//                ));
     }
-
-//    void entityRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-//        event.registerBlockEntityRenderer(
-//                ValkyrienComputersBlockEntities.INSTANCE.getSHIP_HELM().get(),
-//                ShipHelmBlockEntityRenderer::new
-//        );
-//    }
-
-//    void onModelRegistry(final ModelRegistryEvent event) {
-//        for (WoodType woodType : WoodType.values()) {
-//            ForgeModelBakery.addSpecialModel(new ResourceLocation(ValkyrienComputersMod.MOD_ID, "block/" + woodType.getResourceName() + "_ship_helm_wheel"));
-//        }
-//    }
 }

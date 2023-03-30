@@ -15,6 +15,8 @@ object ValkyrienComputersConfig {
 
         val ComputerCraft = COMPUTERCRAFT()
 
+        val TIS3D = TIS()
+
         class COMPUTERCRAFT {
             @JsonSchema(description = "Disable ComputerCraft Integration")
             val disableComputerCraft = false
@@ -64,6 +66,17 @@ object ValkyrienComputersConfig {
 
             @JsonSchema(description = "Max Clip Distance for Ultrasonic getClip() method")
             val maxClipDistance = 12
+        }
+
+        class TIS {
+            @JsonSchema(description = "Disable TIS-3D Integration")
+            val disableTIS3D = false
+
+            @JsonSchema(description = "Disable Eureka Integration")
+            val disableEurekaIntegration = false
+
+            @JsonSchema(description = "Disable Gyroscopic Sensor Module")
+            val disableGyros = false
         }
     }
 }
