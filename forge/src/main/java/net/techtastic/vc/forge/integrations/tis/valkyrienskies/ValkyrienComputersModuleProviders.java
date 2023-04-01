@@ -10,6 +10,8 @@ import net.techtastic.vc.ValkyrienComputersMod;
 import net.techtastic.vc.integrations.tis.TISItems;
 import net.techtastic.vc.integrations.tis.valkyrienskies.GyroscopicSensorModule;
 
+import java.util.HashMap;
+
 public class ValkyrienComputersModuleProviders {
     private static final DeferredRegister<ModuleProvider> MODULES = DeferredRegister.create(ValkyrienComputersMod.MOD_ID, ModuleProvider.REGISTRY);
 
