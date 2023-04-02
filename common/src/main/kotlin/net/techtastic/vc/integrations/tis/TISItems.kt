@@ -6,16 +6,16 @@ import net.minecraft.world.item.Item
 import net.techtastic.vc.ValkyrienComputersConfig
 import net.techtastic.vc.ValkyrienComputersItems
 import net.techtastic.vc.ValkyrienComputersMod
+import net.techtastic.vc.item.AccelerometerSensorModuleItem
 import net.techtastic.vc.item.GyroscopicSensorModuleItem
 import net.techtastic.vc.registry.DeferredRegister
 
 object TISItems {
     val ITEMS = DeferredRegister.create(ValkyrienComputersMod.MOD_ID, Registry.ITEM_REGISTRY)
 
-    val GYRO_MODULE = if (ValkyrienComputersConfig.SERVER.TIS3D.disableGyros) {
-        ITEMS.register("gyro_tis") { ModuleItem(Item.Properties().tab(ValkyrienComputersItems.TAB)) }
-    } else
-        null
+    val GYRO_MODULE = ITEMS.register("gyro_tis") { GyroscopicSensorModuleItem() }
+
+    val ACCEL_MODULE = ITEMS.register("accel_tis") { AccelerometerSensorModuleItem() }
 
     fun register() {
         ITEMS.applyAll()

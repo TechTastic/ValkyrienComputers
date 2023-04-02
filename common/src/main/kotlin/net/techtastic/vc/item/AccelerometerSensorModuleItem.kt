@@ -12,12 +12,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.techtastic.vc.ValkyrienComputersItems
-import net.techtastic.vc.integrations.tis.valkyrienskies.GyroscopicSensorModule
+import net.techtastic.vc.integrations.tis.valkyrienskies.AccelerometerSensorModule
 
-class GyroscopicSensorModuleItem() : ModuleItem(Properties().tab(ValkyrienComputersItems.TAB)) {
+class AccelerometerSensorModuleItem() : ModuleItem(Properties().tab(ValkyrienComputersItems.TAB)) {
     override fun use(level: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = player.getItemInHand(usedHand)
-        var data: GyroscopicSensorModule.OUTMODE = loadFromStack(stack)
+        var data: AccelerometerSensorModule.OUTMODE = loadFromStack(stack)
         if (player.isShiftKeyDown)
             data = data.next()
 
@@ -31,21 +31,21 @@ class GyroscopicSensorModuleItem() : ModuleItem(Properties().tab(ValkyrienComput
     }
 
     override fun appendHoverText(stack: ItemStack, worldIn: Level?, tooltip: MutableList<Component>, flagIn: TooltipFlag) {
-        val data: GyroscopicSensorModule.OUTMODE = loadFromStack(stack)
+        val data: AccelerometerSensorModule.OUTMODE = loadFromStack(stack)
         tooltip.add(TextComponent("Mode: $data"))
         super.appendHoverText(stack, worldIn, tooltip, flagIn)
     }
 
     companion object {
-        fun loadFromTag(tag: CompoundTag): GyroscopicSensorModule.OUTMODE {
-            return EnumUtils.load(GyroscopicSensorModule.OUTMODE::class.java, "ValkyrienComputers\$outputMode", tag)
+        fun loadFromTag(tag: CompoundTag): AccelerometerSensorModule.OUTMODE {
+            return EnumUtils.load(AccelerometerSensorModule.OUTMODE::class.java, "ValkyrienComputers\$outputMode", tag)
         }
 
-        fun loadFromStack(stack: ItemStack): GyroscopicSensorModule.OUTMODE {
+        fun loadFromStack(stack: ItemStack): AccelerometerSensorModule.OUTMODE {
             return loadFromTag(stack.orCreateTag)
         }
 
-        fun saveToStack(stack: ItemStack, mode: GyroscopicSensorModule.OUTMODE) {
+        fun saveToStack(stack: ItemStack, mode: AccelerometerSensorModule.OUTMODE) {
             val tag = stack.orCreateTag
             EnumUtils.save(mode, "ValkyrienComputers\$outputMode", tag)
         }

@@ -71,6 +71,12 @@ dependencies {
 
     // TIS
     modCompileOnly("curse.maven:tis-238603:3738437")
+
+    // Markdown Manual
+    modCompileOnly("curse.maven:tis-502485:3738124")
+
+    // TIS-ADV
+    modCompileOnly("curse.maven:tis-advanced-833240:4426208")
 }
 
 processResources {

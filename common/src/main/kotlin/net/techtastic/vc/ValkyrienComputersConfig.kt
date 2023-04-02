@@ -77,6 +77,9 @@ object ValkyrienComputersConfig {
 
             @JsonSchema(description = "Disable Gyroscopic Sensor Module")
             val disableGyros = false
+
+            @JsonSchema(description = "Disable Accelerometer Sensor Module")
+            val disableAccels = false
         }
     }
 }

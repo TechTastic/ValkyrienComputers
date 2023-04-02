@@ -16,21 +16,15 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
-import net.techtastic.vc.item.GyroscopicSensorModuleItem
+import net.techtastic.vc.item.AccelerometerSensorModuleItem
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.getShipManagingPos
-import kotlin.math.asin
-import kotlin.math.atan2
 
-open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWithRotation(casing, face) {
+open class AccelerometerSensorModule(casing: Casing, face: Face) : AbstractModuleWithRotation(casing, face) {
     enum class OUTMODE {
         X,
         Y,
-        Z,
-        W,
-        ROLL,
-        PIT,
-        YAW;
+        Z;
 
         operator fun next(): OUTMODE {
             if (ordinal == OUTMODE.values().size - 1)
@@ -59,21 +53,11 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
 
         val ship = level.getShipManagingPos(casing.position)
         if (ship != null) {
-            val rot = ship.transform.shipToWorldRotation
+            val vel = ship.velocity
             output = when (this.mode) {
-                OUTMODE.X -> getHalfFloatFromDouble(rot.x())
-                OUTMODE.Y -> getHalfFloatFromDouble(rot.y())
-                OUTMODE.Z -> getHalfFloatFromDouble(rot.z())
-                OUTMODE.W -> getHalfFloatFromDouble(rot.w())
-                OUTMODE.ROLL -> getHalfFloatFromDouble(
-                        atan2(2 * rot.y() * rot.w() - 2 * rot.x() * rot.z(), 1 - 2 * rot.y() * rot.y() - 2 * rot.z() * rot.z())
-                )
-                OUTMODE.PIT -> getHalfFloatFromDouble(
-                        atan2(2 * rot.x() * rot.w() - 2 * rot.y() * rot.z(), 1 - 2 * rot.x() * rot.x() - 2 * rot.z() * rot.z())
-                )
-                OUTMODE.YAW -> getHalfFloatFromDouble(
-                        asin(2 * rot.x() * rot.y() + 2 * rot.z() * rot.w())
-                )
+                OUTMODE.X -> getHalfFloatFromDouble(vel.x())
+                OUTMODE.Y -> getHalfFloatFromDouble(vel.y())
+                OUTMODE.Z -> getHalfFloatFromDouble(vel.z())
             }
         }
 
@@ -90,12 +74,12 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
     }
 
     override fun onInstalled(stack: ItemStack) {
-        val data: OUTMODE = GyroscopicSensorModuleItem.loadFromStack(stack)
+        val data: OUTMODE = AccelerometerSensorModuleItem.loadFromStack(stack)
         this.mode = data
     }
 
     override fun onUninstalled(stack: ItemStack) {
-        GyroscopicSensorModuleItem.saveToStack(stack, this.mode)
+        AccelerometerSensorModuleItem.saveToStack(stack, this.mode)
     }
 
     override fun save(tag: CompoundTag) {
@@ -119,7 +103,7 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
         val matrixStack = context.matrixStack
         matrixStack.pushPose()
         rotateForRendering(matrixStack)
-        context.drawAtlasQuadUnlit(ResourceLocation(ValkyrienSkiesMod.MOD_ID, "block/overlay/gyro_module"))
+        context.drawAtlasQuadUnlit(ResourceLocation(ValkyrienSkiesMod.MOD_ID, "block/overlay/accel_module"))
         if (context.closeEnoughForDetails(casing.position)) {
             drawState(context)
         }
