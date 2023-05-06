@@ -14,6 +14,7 @@ import net.techtastic.vc.ValkyrienComputersMod;
 import net.techtastic.vc.integrations.tis.TISItems;
 import net.techtastic.vc.integrations.tis.valkyrienskies.AccelerometerSensorModule;
 import net.techtastic.vc.integrations.tis.valkyrienskies.GyroscopicSensorModule;
+import net.techtastic.vc.integrations.tis.valkyrienskies.UltrasonicSensorModule;
 import net.techtastic.vc.registry.DeferredRegister;
 import net.techtastic.vc.registry.RegistrySupplier;
 
@@ -34,6 +35,13 @@ public class ValkyrienComputersModuleProviders {
             TISItems.INSTANCE.getACCEL_MODULE().get().delegate,
             "accel_module",
             AccelerometerSensorModule::new
+    );
+
+    public static final RegistrySupplier<ModuleProvider> SONIC_MODULE = registerModule(
+            ValkyrienComputersConfig.SERVER.getTIS3D().getDisableSonics(),
+            TISItems.INSTANCE.getSONIC_MODULE().get().delegate,
+            "sonic_module",
+            UltrasonicSensorModule::new
     );
 
     private static RegistrySupplier<ModuleProvider> registerModule(

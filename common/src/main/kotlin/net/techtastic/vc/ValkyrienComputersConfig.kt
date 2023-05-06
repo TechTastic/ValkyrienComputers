@@ -80,6 +80,12 @@ object ValkyrienComputersConfig {
 
             @JsonSchema(description = "Disable Accelerometer Sensor Module")
             val disableAccels = false
+
+            @JsonSchema(description = "Disable Ultrasonic Sensor Module")
+            val disableSonics = false
+
+            @JsonSchema(description = "Max Clip Distance for Ultrasonic getClip() method")
+            val maxClipDistance = 12
         }
     }
 }

@@ -8,73 +8,42 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.techtastic.vc.ValkyrienComputersConfig
+import net.techtastic.vc.integrations.ShipIntegrationMethods
 import net.techtastic.vc.integrations.cc.ComputerCraftBlocks
-import net.techtastic.vc.util.SpecialLuaTables.Companion.getQuaternionAsTable
 import net.techtastic.vc.util.SpecialLuaTables.Companion.getVectorAsTable
 import org.joml.Vector3d
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.mod.common.getShipManagingPos
-import kotlin.math.asin
-import kotlin.math.atan2
 
 class ShipReaderPeripheral(private val level: Level, private val pos: BlockPos) : IPeripheral {
-    /*@LuaFunction
-    public final String getShipName() throws LuaException {
-        ServerShip ship = isEnabledAndOnShip(pos);
-        if (ship != null) {
-            return ship.getName();
-        } else {
-            throw new LuaException("Not on a Ship");
-        }
-    }
+    @LuaFunction
+    fun getShipName(): String =
+            ShipIntegrationMethods.getNameFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
     @LuaFunction
-    public final boolean setShipName(String string) throws LuaException {
-        ServerShip ship = isEnabledAndOnShip(pos);
-        if (ship != null) {
-            ship.setName(string);
-            return true;
-        } else {
-            throw new LuaException("Not on a Ship");
-        }
-    }*/
-    @Throws(LuaException::class)
-    @LuaFunction
-    fun getShipID() : Long = isEnabledAndOnShip(pos)?.id ?: throw LuaException("Not on a Ship")
+    fun setShipName(name: String) =
+            ShipIntegrationMethods.setNameForShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"), name)
 
-    @Throws(LuaException::class)
     @LuaFunction
-    fun getMass() : Double = isEnabledAndOnShip(pos)?.inertiaData?.mass ?: throw LuaException("Not on a Ship")
+    fun getShipID() : Long =
+            ShipIntegrationMethods.getIdFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
-    @Throws(LuaException::class)
     @LuaFunction
-    fun getVelocity() : MutableMap<Any, Any> {
-        val vel = isEnabledAndOnShip(pos)?.velocity ?: throw LuaException("Not on a Ship")
-        return getVectorAsTable(vel)
-    }
+    fun getMass() : Double =
+            ShipIntegrationMethods.getMassFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
-    @Throws(LuaException::class)
     @LuaFunction
-    fun getWorldspacePosition() : MutableMap<Any, Any> {
-        val position = isEnabledAndOnShip(pos)?.transform?.positionInWorld ?: throw LuaException("Not on a Ship")
-        return getVectorAsTable(position)
-    }
+    fun getVelocity() : Map<String, Double> =
+            ShipIntegrationMethods.getVelocityFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
-    @Throws(LuaException::class)
     @LuaFunction
-    fun getShipyardPosition() : MutableMap<Any, Any> {
-        val position = isEnabledAndOnShip(pos)?.transform?.positionInShip ?: throw LuaException("Not on a Ship")
-        return getVectorAsTable(position)
-    }
+    fun getPosition(arg: IArguments) : Map<String, Double> =
+            ShipIntegrationMethods.getPositionFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"), arg.optBoolean(0, false))
 
-    @Throws(LuaException::class)
     @LuaFunction
-    fun getScale() : MutableMap<Any, Any> {
-        val scaling = isEnabledAndOnShip(pos)?.transform?.shipToWorldScaling ?: throw LuaException("Not on a Ship")
-        return getVectorAsTable(scaling)
-    }
+    fun getScale() : Map<String, Double> =
+            ShipIntegrationMethods.getScaleFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
-    @Throws(LuaException::class)
     @LuaFunction
     fun getSize() : MutableMap<String, Int> {
         val aabb = isEnabledAndOnShip(pos)?.shipAABB ?: throw LuaException("Not on a Ship")
@@ -86,27 +55,12 @@ class ShipReaderPeripheral(private val level: Level, private val pos: BlockPos) 
     }
 
     @LuaFunction
-    @Throws(LuaException::class)
-    fun getRotation(arg: IArguments): MutableMap<Any, Any> {
-        val isQuaternion = arg.optBoolean(0, false)
-        val ship = isEnabledAndOnShip(pos)
-
-        val quat = isEnabledAndOnShip(pos)?.transform?.shipToWorldRotation ?: throw LuaException("Not on a Ship")
-        if (isQuaternion) return getQuaternionAsTable(quat)
-
-        val x = quat.x()
-        val y = quat.y()
-        val z = quat.z()
-        val w = quat.w()
-        return mutableMapOf(
-                Pair("roll", atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z)),
-                Pair("pitch", atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z)),
-                Pair("yaw", asin(2 * x * y + 2 * z * w))
-        )
-    }
+    fun getRotation(arg: IArguments): Map<String, Double> =
+            ShipIntegrationMethods.getRotationFromShip(
+                    isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"),
+                    arg.optBoolean(0, false))
 
     @LuaFunction
-    @Throws(LuaException::class)
     fun transformPosition(x: Double, y: Double, z: Double): MutableMap<Any, Any> {
         val ship = isEnabledAndOnShip(BlockPos(x, y, z))
         return if (ship != null) {
@@ -118,15 +72,9 @@ class ShipReaderPeripheral(private val level: Level, private val pos: BlockPos) 
     }
 
     @LuaFunction
-    @Throws(LuaException::class)
     fun transformDirection(x: Double, y: Double, z: Double): MutableMap<Any, Any> {
-        val ship = isEnabledAndOnShip(BlockPos(x, y, z))
-        return if (ship != null) {
-            getVectorAsTable(ship.shipToWorld.transformDirection(Vector3d(x, y, z)))
-        } else {
-            val matrix = isEnabledAndOnShip(pos)?.worldToShip ?: throw LuaException("Not on a Ship")
-            getVectorAsTable(matrix.transformDirection(Vector3d(x, y, z)))
-        }
+        val matrix = isEnabledAndOnShip(pos)?.worldToShip ?: throw LuaException("Not on a Ship")
+        return getVectorAsTable(matrix.transformDirection(Vector3d(x, y, z)))
     }
 
     @Throws(LuaException::class)

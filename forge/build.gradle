@@ -64,19 +64,19 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     // CC Tweaked
-    modCompileOnly("curse.maven:cctweaked-282001:4061947")
+    modImplementation("curse.maven:cctweaked-282001:4061947")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4191654")
+    modCompileOnly("curse.maven:eureka-654384:4508585")
 
     // TIS
-    modCompileOnly("curse.maven:tis-238603:3738437")
+    modImplementation("curse.maven:tis-238603:3738437")
 
     // Markdown Manual
-    modCompileOnly("curse.maven:tis-502485:3738124")
+    modImplementation("curse.maven:tis-502485:3738124")
 
     // TIS-ADV
-    modCompileOnly("curse.maven:tis-advanced-833240:4426208")
+    modImplementation("curse.maven:tis-advanced-833240:4426208")
 }
 
 processResources {

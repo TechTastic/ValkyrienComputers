@@ -50,10 +50,10 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
     // CC Restitched
-    modCompileOnly("curse.maven:cc-restitched-462672:3622561")
+    modImplementation("curse.maven:cc-restitched-462672:3622561")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4162363")
+    modCompileOnly("curse.maven:eureka-654384:4508584")
 }
 
 processResources {

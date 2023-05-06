@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
+import net.techtastic.vc.integrations.ShipIntegrationMethods
 import net.techtastic.vc.item.AccelerometerSensorModuleItem
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.getShipManagingPos
@@ -53,11 +54,11 @@ open class AccelerometerSensorModule(casing: Casing, face: Face) : AbstractModul
 
         val ship = level.getShipManagingPos(casing.position)
         if (ship != null) {
-            val vel = ship.velocity
+            val vel = ShipIntegrationMethods.getVelocityFromShip(ship)
             output = when (this.mode) {
-                OUTMODE.X -> getHalfFloatFromDouble(vel.x())
-                OUTMODE.Y -> getHalfFloatFromDouble(vel.y())
-                OUTMODE.Z -> getHalfFloatFromDouble(vel.z())
+                OUTMODE.X -> HalfFloat.toHalf(vel.getValue("x").toFloat())
+                OUTMODE.Y -> HalfFloat.toHalf(vel.getValue("y").toFloat())
+                OUTMODE.Z -> HalfFloat.toHalf(vel.getValue("z").toFloat())
             }
         }
 
@@ -67,10 +68,6 @@ open class AccelerometerSensorModule(casing: Casing, face: Face) : AbstractModul
                 sendingPipe.beginWrite(output)
             }
         }
-    }
-
-    private fun getHalfFloatFromDouble(double: Double): Short {
-        return HalfFloat.toHalf(double.toFloat())
     }
 
     override fun onInstalled(stack: ItemStack) {

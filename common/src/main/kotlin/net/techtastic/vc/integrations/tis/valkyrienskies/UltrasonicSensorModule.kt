@@ -12,24 +12,29 @@ import li.cil.tis3d.util.Color
 import li.cil.tis3d.util.EnumUtils
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
-import net.techtastic.vc.integrations.ShipIntegrationMethods
-import net.techtastic.vc.item.GyroscopicSensorModuleItem
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.phys.HitResult
+import net.techtastic.vc.ValkyrienComputersConfig
+import net.techtastic.vc.item.UltrasonicSensorModuleItem
+import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.mod.common.ValkyrienSkiesMod
 import org.valkyrienskies.mod.common.getShipManagingPos
+import org.valkyrienskies.mod.common.squaredDistanceBetweenInclShips
+import org.valkyrienskies.mod.common.util.toJOMLD
+import org.valkyrienskies.mod.common.util.toMinecraft
+import org.valkyrienskies.mod.common.world.clipIncludeShips
 
-open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWithRotation(casing, face) {
+open class UltrasonicSensorModule(casing: Casing, face: Face) : AbstractModuleWithRotation(casing, face) {
     enum class OUTMODE {
-        X,
-        Y,
-        Z,
-        W,
-        ROLL,
-        PIT,
-        YAW;
+        BLOCK,
+        ENTITY;
 
         operator fun next(): OUTMODE {
             if (ordinal == OUTMODE.values().size - 1)
@@ -44,7 +49,7 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
         }
     }
 
-    var mode: OUTMODE = OUTMODE.X
+    var mode: OUTMODE = OUTMODE.BLOCK
 
     override fun step() {
         this.stepOutput()
@@ -58,16 +63,18 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
 
         val ship = level.getShipManagingPos(casing.position)
         if (ship != null) {
-            val qRot = ShipIntegrationMethods.getRotationFromShip(ship, true)
-            val rpyRot = ShipIntegrationMethods.getRotationFromShip(ship, false)
-            output = when (this.mode) {
-                OUTMODE.X -> HalfFloat.toHalf(qRot.getValue("x").toFloat())
-                OUTMODE.Y -> HalfFloat.toHalf(qRot.getValue("y").toFloat())
-                OUTMODE.Z -> HalfFloat.toHalf(qRot.getValue("z").toFloat())
-                OUTMODE.W -> HalfFloat.toHalf(qRot.getValue("w").toFloat())
-                OUTMODE.ROLL -> HalfFloat.toHalf(rpyRot.getValue("roll").toFloat())
-                OUTMODE.PIT -> HalfFloat.toHalf(rpyRot.getValue("pitch").toFloat())
-                OUTMODE.YAW -> HalfFloat.toHalf(rpyRot.getValue("yaw").toFloat())
+            val hit = getClip(level, casing.position, ship, ValkyrienComputersConfig.SERVER.TIS3D.maxClipDistance)
+            if (hit != null) {
+                output = when (this.mode) {
+                    OUTMODE.BLOCK -> if (hit.first.equals("block"))
+                        HalfFloat.toHalf(hit.second.second.toFloat())
+                    else
+                        0
+                    OUTMODE.ENTITY -> if (hit.first.equals("entity"))
+                        HalfFloat.toHalf(hit.second.second.toFloat())
+                    else
+                        0
+                }
             }
         }
 
@@ -79,17 +86,13 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
         }
     }
 
-    private fun getHalfFloatFromDouble(double: Double): Short {
-        return HalfFloat.toHalf(double.toFloat())
-    }
-
     override fun onInstalled(stack: ItemStack) {
-        val data: OUTMODE = GyroscopicSensorModuleItem.loadFromStack(stack)
+        val data: OUTMODE = UltrasonicSensorModuleItem.loadFromStack(stack)
         this.mode = data
     }
 
     override fun onUninstalled(stack: ItemStack) {
-        GyroscopicSensorModuleItem.saveToStack(stack, this.mode)
+        UltrasonicSensorModuleItem.saveToStack(stack, this.mode)
     }
 
     override fun save(tag: CompoundTag) {
@@ -113,7 +116,7 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
         val matrixStack = context.matrixStack
         matrixStack.pushPose()
         rotateForRendering(matrixStack)
-        context.drawAtlasQuadUnlit(ResourceLocation(ValkyrienSkiesMod.MOD_ID, "block/overlay/gyro_module"))
+        context.drawAtlasQuadUnlit(ResourceLocation(ValkyrienSkiesMod.MOD_ID, "block/overlay/accel_module"))
         if (context.closeEnoughForDetails(casing.position)) {
             drawState(context)
         }
@@ -134,5 +137,35 @@ open class GyroscopicSensorModule(casing: Casing, face: Face) : AbstractModuleWi
 
         if (mode.name.length == 3)
             matrixStack.translate(-7.25, 0.0, 0.0)
+    }
+
+    fun getClip(level: Level, pos: BlockPos, ship: ServerShip?, distance: Int): Pair<String, Pair<String, Double>>? {
+        val state = level.getBlockState(pos)
+        val direction = state.getValue(BlockStateProperties.FACING)
+
+        val result: HitResult = level.clipIncludeShips(ClipContext(
+                pos.toJOMLD().toMinecraft(),
+                pos.relative(direction, distance).toJOMLD().toMinecraft(),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.ANY,
+                null),
+                true,
+                ship?.id
+        )
+
+        if (result.type.equals(HitResult.Type.MISS)) return null
+
+        val dist = Pair("distance", level.squaredDistanceBetweenInclShips(
+                pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
+                result.location.x, result.location.y, result.location.z)
+        )
+
+        return if (result.type.equals(HitResult.Type.BLOCK)) {
+            Pair("block", dist)
+        } else if (result.type.equals(HitResult.Type.ENTITY)) {
+            Pair("entity", dist)
+        } else {
+            Pair("something", dist)
+        }
     }
 }

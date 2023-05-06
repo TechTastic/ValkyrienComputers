@@ -33,7 +33,7 @@ dependencies {
     modCompileOnly("curse.maven:cc-restitched-462672:3622561")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4162363")
+    modCompileOnly("curse.maven:eureka-654384:4508584")
 
     // TIS
     modCompileOnly("curse.maven:tis-238603:3738437")

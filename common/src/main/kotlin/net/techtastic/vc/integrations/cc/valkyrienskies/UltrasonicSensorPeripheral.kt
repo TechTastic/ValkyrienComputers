@@ -32,8 +32,10 @@ class UltrasonicSensorPeripheral(private val sensor : UltrasonicSensorBlockEntit
 
     @LuaFunction
     fun clip(dist: Int): Pair<String, Pair<String, Double>> {
-        if (level == null || level.isClientSide) throw LuaException("Clientside or Null")
-        if (ValkyrienComputersConfig.SERVER.ComputerCraft.disableSonic) throw LuaException("Disabled")
+        if (level == null || level.isClientSide)
+            throw LuaException("Clientside or Null")
+        if (ValkyrienComputersConfig.SERVER.ComputerCraft.disableSonic)
+            throw LuaException("Disabled")
         val level = level as ServerLevel
         if (dist > ValkyrienComputersConfig.SERVER.ComputerCraft.maxClipDistance)
             return sensor.getClip(level, pos, level.getShipManagingPos(pos), ValkyrienComputersConfig.SERVER.ComputerCraft.maxClipDistance)

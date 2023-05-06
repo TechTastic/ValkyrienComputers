@@ -8,6 +8,7 @@ import net.techtastic.vc.ValkyrienComputersItems
 import net.techtastic.vc.ValkyrienComputersMod
 import net.techtastic.vc.item.AccelerometerSensorModuleItem
 import net.techtastic.vc.item.GyroscopicSensorModuleItem
+import net.techtastic.vc.item.UltrasonicSensorModuleItem
 import net.techtastic.vc.registry.DeferredRegister
 
 object TISItems {
@@ -16,6 +17,8 @@ object TISItems {
     val GYRO_MODULE = ITEMS.register("gyro_tis") { GyroscopicSensorModuleItem() }
 
     val ACCEL_MODULE = ITEMS.register("accel_tis") { AccelerometerSensorModuleItem() }
+
+    val SONIC_MODULE = ITEMS.register("sonic_tis") { UltrasonicSensorModuleItem() }
 
     fun register() {
         ITEMS.applyAll()

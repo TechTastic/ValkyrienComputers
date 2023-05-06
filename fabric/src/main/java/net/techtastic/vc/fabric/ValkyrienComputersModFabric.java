@@ -1,6 +1,6 @@
 package net.techtastic.vc.fabric;
 
-import net.fabricmc.loader.api.FabricLoader;
+import dev.architectury.platform.Platform;
 import net.techtastic.vc.ValkyrienComputersMod;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -8,13 +8,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
-import net.techtastic.vc.fabric.integrations.cc.eureka.EurekaPeripheralProviders;
 import net.techtastic.vc.fabric.integrations.cc.valkyrienskies.ValkyrienComputersPeripheralProviders;
 import org.valkyrienskies.core.impl.config.VSConfigClass;
 import net.techtastic.vc.ValkyrienComputersConfig;
-//import net.techtastic.vc.block.WoodType;
-//import net.techtastic.vc.blockentity.renderer.ShipHelmBlockEntityRenderer;
-//import net.techtastic.vc.blockentity.renderer.WheelModels;
 import org.valkyrienskies.mod.compat.clothconfig.VSClothConfig;
 import org.valkyrienskies.mod.fabric.common.ValkyrienSkiesModFabric;
 
@@ -24,14 +20,14 @@ public class ValkyrienComputersModFabric implements ModInitializer {
         // force VS2 to load before vc
         new ValkyrienSkiesModFabric().onInitialize();
 
-        FabricLoader loader = FabricLoader.getInstance();
         ValkyrienComputersConfig.Server.COMPUTERCRAFT ccConfig = ValkyrienComputersConfig.SERVER.getComputerCraft();
-        if (loader.isModLoaded("computercraft") && !ccConfig.getDisableComputerCraft()) {
+        if (Platform.isModLoaded("computercraft") && !ccConfig.getDisableComputerCraft()) {
             ValkyrienComputersPeripheralProviders.registerPeripheralProviders();
 
-            if (loader.isModLoaded("vs_eureka") && !ccConfig.getDisableEurekaIntegration()) {
-                EurekaPeripheralProviders.registerPeripheralProviders();
-            }
+            // EUREKA IS CURRENTLY UNSUPPORTED
+
+            //if (Platform.isModLoaded("vs_eureka") && !ccConfig.getDisableEurekaIntegration())
+                //EurekaPeripheralProviders.registerPeripheralProviders();
         }
 
         ValkyrienComputersMod.init();

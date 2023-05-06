@@ -7,11 +7,10 @@ import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.server.level.ServerLevel
 import net.techtastic.vc.blockentity.GyroscopicSensorBlockEntity
+import net.techtastic.vc.integrations.ShipIntegrationMethods
 import org.valkyrienskies.core.api.ships.ServerShip
 import org.valkyrienskies.mod.common.getShipManagingPos
 import java.util.*
-import kotlin.math.asin
-import kotlin.math.atan2
 
 class GyroscopicSensorPeripheral(private val sensor : GyroscopicSensorBlockEntity) : IPeripheral {
     val level = sensor.level
@@ -21,38 +20,22 @@ class GyroscopicSensorPeripheral(private val sensor : GyroscopicSensorBlockEntit
     fun giveQuaternion(args: IArguments) {
         val bool = args.optBoolean(0)
 
-        if (bool.isPresent) {
+        if (bool.isPresent)
             sensor.giveQuaternion = bool.get()
-        } else {
+        else
             sensor.giveQuaternion = sensor.giveQuaternion.not()
-        }
     }
 
     @Throws(LuaException::class)
     @LuaFunction
-    fun getRotation(args: IArguments): MutableMap<String, Double> {
-        if (level == null || level.isClientSide) throw LuaException("Level doesn't exist or is clientside")
+    fun getRotation(args: IArguments): Map<String, Double> {
+        if (level == null || level.isClientSide)
+            throw LuaException("Level doesn't exist or is clientside")
         val level = level as ServerLevel
-        val ship: ServerShip = level.getShipManagingPos(pos) ?: throw LuaException("Not on a Ship")
+        val ship: ServerShip = level.getShipManagingPos(pos)
+                ?: throw LuaException("Not on a Ship")
 
-        val quat = ship.transform.shipToWorldRotation
-        val x = quat.x()
-        val y = quat.y()
-        val z = quat.z()
-        val w = quat.w()
-        val rotation = mutableMapOf<String, Double>()
-        if (args.optBoolean(0, false)) {
-            rotation["x"] = x
-            rotation["y"] = y
-            rotation["z"] = z
-            rotation["w"] = w
-        } else {
-            rotation["roll"] = atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z)
-            rotation["pitch"] = atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z)
-            rotation["yaw"] = asin(2 * x * y + 2 * z * w)
-        }
-        
-        return rotation
+        return ShipIntegrationMethods.getRotationFromShip(ship, args.optBoolean(0, false))
     }
 
     override fun getType(): String = "gyroscope"
