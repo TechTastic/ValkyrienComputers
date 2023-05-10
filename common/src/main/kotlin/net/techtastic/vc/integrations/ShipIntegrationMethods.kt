@@ -1,5 +1,6 @@
 package net.techtastic.vc.integrations
 
+import dan200.computercraft.api.lua.LuaException
 import org.valkyrienskies.core.api.ships.ServerShip
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -67,5 +68,14 @@ class ShipIntegrationMethods {
         fun getIdFromShip(ship: ServerShip): Long = ship.id
 
         fun getMassFromShip(ship: ServerShip): Double = ship.inertiaData.mass
+
+        fun getSizeFromShip(ship: ServerShip) : Map<String, Int> {
+            val aabb = ship.shipAABB!!
+            return mapOf(
+                    Pair("x", aabb.maxX() - aabb.minX()),
+                    Pair("y", aabb.maxY() - aabb.minY()),
+                    Pair("z", aabb.maxZ() - aabb.minZ())
+            )
+        }
     }
 }

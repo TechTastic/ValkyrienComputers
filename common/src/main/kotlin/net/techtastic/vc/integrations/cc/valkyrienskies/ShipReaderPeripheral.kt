@@ -45,14 +45,8 @@ class ShipReaderPeripheral(private val level: Level, private val pos: BlockPos) 
             ShipIntegrationMethods.getScaleFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
     @LuaFunction
-    fun getSize() : MutableMap<String, Int> {
-        val aabb = isEnabledAndOnShip(pos)?.shipAABB ?: throw LuaException("Not on a Ship")
-        return mutableMapOf(
-                Pair("x", aabb.maxX() - aabb.minX()),
-                Pair("y", aabb.maxY() - aabb.minY()),
-                Pair("z", aabb.maxZ() - aabb.minZ())
-        )
-    }
+    fun getSize() : Map<String, Int> =
+            ShipIntegrationMethods.getSizeFromShip(isEnabledAndOnShip(pos) ?: throw LuaException("Not on a Ship"))
 
     @LuaFunction
     fun getRotation(arg: IArguments): Map<String, Double> =
