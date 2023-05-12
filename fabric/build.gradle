@@ -44,7 +44,8 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config:${cloth_config_version}")
 
     // Remove the next line if you don't want to depend on the API
-    modApi("org.valkyrienskies:valkyrienskies-118-fabric:${rootProject.vs2_version}")
+    modApi("org.valkyrienskies:valkyrienskies-118-fabric:${rootProject.vs2_version}") { transitive = false }
+    implementation("org.valkyrienskies.core:api:1.1.0+2b2f93f793") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }

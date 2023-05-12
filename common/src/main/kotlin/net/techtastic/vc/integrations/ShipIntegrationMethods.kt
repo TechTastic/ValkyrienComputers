@@ -1,6 +1,5 @@
 package net.techtastic.vc.integrations
 
-import dan200.computercraft.api.lua.LuaException
 import org.valkyrienskies.core.api.ships.ServerShip
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -47,9 +46,7 @@ class ShipIntegrationMethods {
             )
         }
 
-        fun getNameFromShip(ship: ServerShip): String {
-            return ship.slug ?: "no-name"
-        }
+        fun getNameFromShip(ship: ServerShip): String = ship.slug ?: "no-name"
 
         fun setNameForShip(ship: ServerShip, name: String) {
             ship.slug = name
