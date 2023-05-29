@@ -63,6 +63,9 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
+    // Kotlin for Forge
+    modImplementation("curse.maven:kotlinforforge-351264:3925887")
+
     // CC Tweaked
     modImplementation("curse.maven:cctweaked-282001:4061947")
 
