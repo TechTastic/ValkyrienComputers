@@ -11,7 +11,7 @@ authors = "TechTastic"
 description = '''
 Computer-based Mod Integration with Valkyrien Skies addons
 '''
-#logoFile = ""
+logoFile = "assets/vc/textures/item/vc_logo.png"
 
 [[dependencies.vc]]
 modId = "forge"

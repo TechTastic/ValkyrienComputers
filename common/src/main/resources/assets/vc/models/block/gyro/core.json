@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"3": "vc:block/gyro/core",
+		"particle": "minecraft:block/gold_block"
+	},
+	"elements": [
+		{
+			"name": "core",
+			"from": [7, 7, 7],
+			"to": [9, 9, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [2, 2, 4, 4], "texture": "#3"},
+				"east": {"uv": [0, 2, 2, 4], "texture": "#3"},
+				"south": {"uv": [6, 2, 8, 4], "texture": "#3"},
+				"west": {"uv": [4, 2, 6, 4], "texture": "#3"},
+				"up": {"uv": [4, 2, 2, 0], "texture": "#3"},
+				"down": {"uv": [6, 0, 4, 2], "texture": "#3"}
+			}
+		}
+	]
+}

@@ -14,20 +14,17 @@
     "sources": "https://github.com/ValkyrienSkies/ValkyrienComputers"
   },
   "license": "Apache-2.0",
-  "icon": "assets/vc/icon.png",
+  "icon": "assets/vc/textures/item/vc_logo.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.techtastic.vc.fabric.ValkyrienComputersModFabric"
+      "io.github.techtastic.vc.fabric.ValkyrienComputersModFabric"
     ],
     "client": [
-      "net.techtastic.vc.fabric.ValkyrienComputersModFabric${'$'}Client"
+      "io.github.techtastic.vc.fabric.ValkyrienComputersModFabric"
     ],
     "preLaunch": [
-      "net.techtastic.vc.fabric.ValkyrienPreLaunch"
-    ],
-    "modmenu": [
-      "net.techtastic.vc.fabric.ValkyrienComputersModFabric${'$'}ModMenu"
+      "io.github.techtastic.vc.fabric.ValkyrienPreLaunch"
     ]
   },
   "mixins": [

@@ -1,7 +1,0 @@
-{
-    "parent": "tis3d:item/module",
-    "textures": {
-        "layer0": "tis3d:block/casing_module",
-        "layer1": "vc:item/accel_module"
-    }
-}

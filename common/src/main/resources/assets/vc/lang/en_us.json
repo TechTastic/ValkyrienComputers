@@ -1,10 +1,4 @@
 {
-  "block.vc.radar_cc": "Ship Radar",
-  "block.vc.reader_cc": "Ship Reader",
-  "block.vc.gyro_cc": "Gyroscopic Sensor",
-  "block.vc.accel_cc": "Accelerometer",
-  "block.vc.sonic_cc": "Ultrasonic Sensor",
-  "block.vc.top_cc": "Motor Head",
-  "block.vc.motor_cc": "Motor",
+  "block.vc.gyro": "Gyroscopic Sensor",
   "itemGroup.vc.vc_tab": "Valkyrien Computers"
 }

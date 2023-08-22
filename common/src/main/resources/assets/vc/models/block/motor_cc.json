@@ -1,7 +1,0 @@
-{
-	"parent": "block/cube_column",
-	"textures": {
-		"end": "computercraft:block/computer_advanced_top",
-		"side": "vc:block/motor_side_full_cc"
-	}
-}

@@ -25,25 +25,33 @@ dependencies {
 
     modApi("org.valkyrienskies:valkyrienskies-118-common:${rootProject.vs2_version}")
     implementation("org.valkyrienskies.core:api:${rootProject.vs_core_version}") { transitive = false }
+    implementation("org.valkyrienskies.core:impl:${rootProject.vs_core_version}") { transitive = false }
+    implementation("org.valkyrienskies.core:api-game:${rootProject.vs_core_version}") { transitive = false }
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.21"
     api "org.jetbrains.kotlin:kotlin-reflect:1.7.21"
-    implementation 'org.joml:joml:1.9.2'
+
+    // JOML
+    compileOnly("org.joml:joml:1.10.4")
+    compileOnly("org.joml:joml-primitives:1.10.0")
+
+    //Flywheel
+    modImplementation("com.jozufozu.flywheel:flywheel-fabric-${minecraft_version}:${flywheel_version}")
 
     // CC Restitched
     modCompileOnly("curse.maven:cc-restitched-462672:3622561")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4508584")
+    //modCompileOnly("curse.maven:eureka-654384:4508584")
 
     // TIS
-    modCompileOnly("curse.maven:tis-238603:3738437")
+    //modCompileOnly("curse.maven:tis-238603:3738437")
 
     // Markdown Manual
-    modCompileOnly("curse.maven:markdown-manual-502485:3738124")
+    //modCompileOnly("curse.maven:markdown-manual-502485:3738124")
 
     // TIS-ADV
-    modCompileOnly("curse.maven:tis-advanced-833240:4426208")
+    //modCompileOnly("curse.maven:tis-advanced-833240:4426208")
 }
 
 publishing {

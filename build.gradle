@@ -1,10 +1,10 @@
 plugins {
     // Needed for Forge+Fabric
-    id "architectury-plugin" version "3.4.143"
-    id "dev.architectury.loom" version "1.0.306" apply false
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.1-SNAPSHOT" apply false
     id 'io.github.juuxel.loom-quiltflower' version '1.8.0' apply false
     // Kotlin
-    id "org.jetbrains.kotlin.jvm" version "1.7.10" apply false
+    id "org.jetbrains.kotlin.jvm" version "1.7.21" apply false
     // Kotlin linter
     id "org.jlleitschuh.gradle.ktlint" version "10.3.0"
 
@@ -12,23 +12,9 @@ plugins {
     id "com.modrinth.minotaur" version "2.4.3" apply false
 }
 
-// Determine the version
-if (project.hasProperty("CustomReleaseVersion")) {
-    // Remove release/ from the version if present
-    version = project.property("CustomReleaseVersion").replaceFirst("^release/", "")
-} else {
-    String gitRevision = "git rev-parse HEAD".execute().text.trim()
-
-    version = vc_version + '+' + gitRevision.substring(0, 10)
-}
-
 architectury {
     minecraft = rootProject.minecraft_version
 }
-
-// Determine the version of vs-core
-//String vsCoreGitRevision = "git rev-parse HEAD".execute(null, gradle.includedBuild("vs-core").projectDir).text.trim()
-ext.vs_core_version = "1.1.0+2b2f93f793" //"1.1.0+" + vsCoreGitRevision.substring(0, 10)
 
 subprojects {
     apply plugin: "dev.architectury.loom"
@@ -87,27 +73,27 @@ subprojects {
 }
 
 
-    allprojects {
+allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
     archivesBaseName = rootProject.archives_base_name
-    version = rootProject.version
+    version = "${vc_version}+${project.name}-${minecraft_version}"
 
-        repositories {
-            mavenLocal()
-            maven {
-                name = "Valkyrien Skies Internal"
-                url = project.vs_maven_url ?: 'https://maven.valkyrienskies.org'
-                if (project.vs_maven_username && project.vs_maven_password) {
-                    credentials {
-                        username = project.vs_maven_username
-                        password = project.vs_maven_password
-                    }
+    repositories {
+        mavenLocal()
+        maven {
+            name = "Valkyrien Skies Internal"
+            url = project.vs_maven_url ?: 'https://maven.valkyrienskies.org'
+            if (project.vs_maven_username && project.vs_maven_password) {
+                credentials {
+                    username = project.vs_maven_username
+                    password = project.vs_maven_password
                 }
             }
         }
+    }
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"

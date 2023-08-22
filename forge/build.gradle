@@ -66,20 +66,23 @@ dependencies {
     // Kotlin for Forge
     modImplementation("curse.maven:kotlinforforge-351264:3925887")
 
+    //Flywheel
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+
     // CC Tweaked
     modImplementation("curse.maven:cctweaked-282001:4061947")
 
     // Eureka
-    modCompileOnly("curse.maven:eureka-654384:4508585")
+    //modCompileOnly("curse.maven:eureka-654384:4508585")
 
     // TIS
-    modImplementation("curse.maven:tis-238603:3738437")
+    //modImplementation("curse.maven:tis-238603:3738437")
 
     // Markdown Manual
-    modImplementation("curse.maven:tis-502485:3738124")
+    //modImplementation("curse.maven:tis-502485:3738124")
 
     // TIS-ADV
-    modImplementation("curse.maven:tis-advanced-833240:4426208")
+    //modImplementation("curse.maven:tis-advanced-833240:4426208")
 }
 
 processResources {
