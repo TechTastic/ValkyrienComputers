@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import io.github.techtastic.vc.ValkyrienComputersMod
+import io.github.techtastic.vc.block.entity.AltimeterSensorBlockEntity
 import io.github.techtastic.vc.block.entity.GyroscopicSensorBlockEntity
 import io.github.techtastic.vc.registry.DeferredRegister
 import io.github.techtastic.vc.registry.RegistrySupplier
@@ -18,6 +19,7 @@ object VCBlockEntities {
     private val BLOCKENTITIES = DeferredRegister.create(ValkyrienComputersMod.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY)
 
     var GYRO = VCBlocks.GYRO withBE ::GyroscopicSensorBlockEntity byName "gyro"
+    var ALTIMETER = VCBlocks.ALTIMETER withBE ::AltimeterSensorBlockEntity byName "altimeter"
 
     fun register() {
         BLOCKENTITIES.applyAll()

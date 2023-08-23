@@ -32,10 +32,4 @@ public class ValkyrienComputersPlatformHelperForge implements ValkyrienComputers
             }
         };
     }
-
-    @NotNull
-    @Override
-    public GyroscopicSensorBlockItem newGyroscopicSensorBlockItem(@NotNull Block block, @NotNull Item.Properties properties) {
-        return new GyroscopicSensorBlockItemImpl(block, properties);
-    }
 }

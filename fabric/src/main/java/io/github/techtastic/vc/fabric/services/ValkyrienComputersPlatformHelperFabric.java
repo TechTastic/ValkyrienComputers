@@ -18,10 +18,4 @@ public class ValkyrienComputersPlatformHelperFabric implements ValkyrienComputer
     public CreativeModeTab createCreativeTab(@NotNull ResourceLocation id, @NotNull Function0<ItemStack> stack) {
         return FabricItemGroupBuilder.build(id, stack::invoke);
     }
-
-    @NotNull
-    @Override
-    public GyroscopicSensorBlockItem newGyroscopicSensorBlockItem(@NotNull Block block, @NotNull Item.Properties properties) {
-        return new GyroscopicSensorBlockItem(block, properties);
-    }
 }

@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.material.Material
 import io.github.techtastic.vc.item.VCItems
 import io.github.techtastic.vc.ValkyrienComputersMod
+import io.github.techtastic.vc.block.custom.AltimeterSensorBlock
 import io.github.techtastic.vc.block.custom.GyroscopicSensorBlock
 import io.github.techtastic.vc.registry.DeferredRegister
 
@@ -16,7 +17,8 @@ object VCBlocks {
     private val BLOCKS_WITHOUT_ITEMS = DeferredRegister.create(ValkyrienComputersMod.MOD_ID, Registry.BLOCK_REGISTRY)
     private val ITEMS = DeferredRegister.create(ValkyrienComputersMod.MOD_ID, Registry.ITEM_REGISTRY)
 
-    val GYRO = BLOCKS_WITHOUT_ITEMS.register("gyro") { GyroscopicSensorBlock(BlockBehaviour.Properties.of(Material.STONE)) }
+    val GYRO = BLOCKS.register("gyro") { GyroscopicSensorBlock(BlockBehaviour.Properties.of(Material.STONE)) }
+    val ALTIMETER = BLOCKS.register("altimeter") { AltimeterSensorBlock(BlockBehaviour.Properties.of(Material.STONE)) }
 
     fun register() {
         BLOCKS.applyAll()

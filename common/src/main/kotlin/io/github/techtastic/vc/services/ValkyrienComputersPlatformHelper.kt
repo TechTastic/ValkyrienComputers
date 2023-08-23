@@ -9,6 +9,4 @@ import net.minecraft.world.level.block.Block
 
 interface ValkyrienComputersPlatformHelper {
     fun createCreativeTab(id: ResourceLocation, stack: () -> ItemStack): CreativeModeTab
-
-    fun newGyroscopicSensorBlockItem(block: Block, properties: Properties): GyroscopicSensorBlockItem
 }

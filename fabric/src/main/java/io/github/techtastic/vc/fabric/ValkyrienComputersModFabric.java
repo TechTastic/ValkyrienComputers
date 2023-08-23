@@ -6,7 +6,6 @@ import io.github.techtastic.vc.block.VCBlocks;
 import io.github.techtastic.vc.fabric.integrations.cc.valkyrienskies.ValkyrienComputersPeripheralProviders;
 import io.github.techtastic.vc.ValkyrienComputersMod;
 import io.github.techtastic.vc.fabric.rendering.GyroscopicSensorDIR;
-import io.github.techtastic.vc.item.VCItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,7 +34,7 @@ public class ValkyrienComputersModFabric implements ModInitializer {
 
             ValkyrienComputersMod.initClient();
 
-            BuiltinItemRendererRegistry.INSTANCE.register(VCItems.INSTANCE.getGYRO().get(), new GyroscopicSensorDIR());
+            BuiltinItemRendererRegistry.INSTANCE.register(VCBlocks.INSTANCE.getGYRO().get().asItem(), new GyroscopicSensorDIR());
         }
     }
 }
