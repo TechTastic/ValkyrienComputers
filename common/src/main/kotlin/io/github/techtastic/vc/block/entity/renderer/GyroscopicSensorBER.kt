@@ -29,9 +29,6 @@ import kotlin.random.asJavaRandom
 
 class GyroscopicSensorBER(private val context: BlockEntityRendererProvider.Context): BaseSensorBER<GyroscopicSensorBlockEntity>(context) {
     override fun render(sensor: GyroscopicSensorBlockEntity, partial: Float, ps: PoseStack, buffer: MultiBufferSource, light: Int, overlay: Int) {
-        if (sensor.level !is ClientLevel)
-            return
-
         val level: ClientLevel = sensor.level as ClientLevel
         val pos: BlockPos = sensor.blockPos
         val state: BlockState = sensor.blockState
