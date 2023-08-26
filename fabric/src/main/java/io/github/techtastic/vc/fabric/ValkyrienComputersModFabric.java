@@ -10,7 +10,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.minecraft.client.renderer.RenderType;
 import org.valkyrienskies.mod.fabric.common.ValkyrienSkiesModFabric;
 
 public class ValkyrienComputersModFabric implements ModInitializer {
@@ -33,6 +35,8 @@ public class ValkyrienComputersModFabric implements ModInitializer {
             VCPartials.INSTANCE.init();
 
             ValkyrienComputersMod.initClient();
+
+            BlockRenderLayerMap.INSTANCE.putBlock(VCBlocks.INSTANCE.getGYRO().get(), RenderType.cutout());
 
             BuiltinItemRendererRegistry.INSTANCE.register(VCBlocks.INSTANCE.getGYRO().get().asItem(), new GyroscopicSensorDIR());
         }

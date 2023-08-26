@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.Tuple
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -18,11 +19,11 @@ import kotlin.random.asJavaRandom
 class GyroscopicSensorBlockEntity(pos: BlockPos, state: BlockState): BaseSensorBlockEntity(VCBlockEntities.GYRO.get(), pos, state) {
     private var previousQuaternion: Quaterniondc? = null
     var testAngle: Double = Math.toRadians(0.5)
-    var animAngle: Double = 0.0
-    var animDirection: Direction = Direction.NORTH
 
     override fun <T : BlockEntity?> tick(level: Level, pos: BlockPos, state: BlockState, be: T) {
         super.tick(level, pos, state, be)
+
+        level.updateNeighbourForOutputSignal(pos, state.block)
 
         if (level.isClientSide)
             return
@@ -74,35 +75,53 @@ class GyroscopicSensorBlockEntity(pos: BlockPos, state: BlockState): BaseSensorB
         testAngle = tag.getDouble("vc\$testAngle")
     }
 
-    fun incrementAngle() {
-        if (animAngle >= 359) {
-            animAngle = 0.0
-            changeDirection()
-        } else
-            animAngle += 1
+    // Animation
+
+    var outerAnimAngle = 0
+    var outerAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+    var outerAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+
+    fun getOuterRingAnimation(): Triple<Float, Direction, Direction> {
+        if (outerAnimAngle == 359) {
+            outerAnimAngle = 0
+            outerAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+            outerAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+        } else {
+            outerAnimAngle++
+        }
+
+        return Triple(Math.toRadians(outerAnimAngle.toDouble()).toFloat(), outerAnimFirstDirection, outerAnimSecondDirection)
     }
 
-    private fun changeDirection() {
-        val random = Random.asJavaRandom()
-        when (animDirection) {
-            Direction.UP, Direction.DOWN ->
-                animDirection =
-                        if (random.nextFloat() > 0.5)
-                            Direction.NORTH
-                        else
-                            Direction.WEST
-            Direction.SOUTH, Direction.NORTH ->
-                animDirection =
-                        if (random.nextFloat() > 0.5)
-                            Direction.WEST
-                        else
-                            Direction.DOWN
-            Direction.WEST, Direction.EAST ->
-                animDirection =
-                        if (random.nextFloat() > 0.5)
-                            Direction.DOWN
-                        else
-                            Direction.NORTH
+    var middleAnimAngle = 0
+    var middleAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+    var middleAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+
+    fun getMiddleRingAnimation(): Triple<Float, Direction, Direction> {
+        if (middleAnimAngle == 359) {
+            middleAnimAngle = 0
+            middleAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+            middleAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+        } else {
+            middleAnimAngle++
         }
+
+        return Triple(Math.toRadians(middleAnimAngle.toDouble()).toFloat(), middleAnimFirstDirection, middleAnimSecondDirection)
+    }
+
+    var innerAnimAngle = 0
+    var innerAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+    var innerAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+
+    fun getInnerRingAnimation(): Triple<Float, Direction, Direction> {
+        if (innerAnimAngle == 359) {
+            innerAnimAngle = 0
+            innerAnimFirstDirection = Direction.getRandom(Random.asJavaRandom())
+            innerAnimSecondDirection = Direction.getRandom(Random.asJavaRandom())
+        } else {
+            innerAnimAngle++
+        }
+
+        return Triple(Math.toRadians(innerAnimAngle.toDouble()).toFloat(), innerAnimFirstDirection, innerAnimSecondDirection)
     }
 }
